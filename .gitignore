@@ -1,0 +1,8 @@
+# Local metadata files
+.DS_Store
+
+# Binaries
+bin/
+
+# Sensitive files
+.envrc
