@@ -55,6 +55,12 @@ db/migrations/down:
 	@echo 'Reverting all migrations...'
 	migrate -path ./migrations -database ${HOTEL_DB_DSN} down
 
+## db/migrations/goto version=$1: Go to the specified migration version
+.PHONY: db/migrations/goto
+db/migrations/goto:
+	@echo 'Going to schema migration version ${version}...'
+	migrate -path ./migrations -database ${HOTEL_DB_DSN} goto ${version}
+
 ## db/migrations/fix version=$1: Force the schema_migrations table version
 .PHONY: db/migrations/fix
 db/migrations/fix:
