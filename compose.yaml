@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:18.1
+    container_name: hotel_postgres
+    environment:
+      POSTGRES_USER: hotel_user
+      POSTGRES_PASSWORD: hotel_password
+      POSTGRES_DB: hotel
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U hotel_user -d hotel']
+      interval: 1s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hotel_network
+
+  app:
+    build: .
+    container_name: hotel_app
+    ports:
+      - '4000:4000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: hotel_user
+      DB_PASSWORD: hotel_password
+      DB_NAME: hotel
+    networks:
+      - hotel_network
+
+networks:
+  hotel_network:
+    name: hotel_network
+    driver: bridge
