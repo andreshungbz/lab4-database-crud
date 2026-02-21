@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -114,4 +115,22 @@ func (app *application) readIDParam(r *http.Request) (int64, error) {
 	}
 
 	return id, nil
+}
+
+// readPassportParams validates and returns the given request URL's passport parameter.
+func (app *application) readPassportParam(r *http.Request) string {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	return params.ByName("passport")
+}
+
+// readString gets the value of a URL key.
+func (app *application) readString(qs url.Values, key string, defaultValue string) string {
+	s := qs.Get(key)
+
+	if s == "" {
+		return defaultValue
+	}
+
+	return s
 }

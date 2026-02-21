@@ -19,9 +19,13 @@ func (app *application) routes() http.Handler {
 	// Healthcheck route
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
 
-	// Room routes
-	router.HandlerFunc(http.MethodGet, "/v1/rooms/:id", app.showRoomHandler)
-	router.HandlerFunc(http.MethodPost, "/v1/rooms", app.createRoomHandler)
+	// Guest routes
+	router.HandlerFunc(http.MethodGet, "/v1/guests/:passport", app.showGuestHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/guests", app.listGuestsHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/guests", app.createGuestHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/guests/:passport", app.updateGuestHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/guests/:passport", app.updateGuestHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/guests/:passport", app.deleteGuestHandler)
 
 	// Metrics debugging route
 	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
