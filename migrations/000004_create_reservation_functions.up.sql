@@ -315,3 +315,48 @@ BEGIN
     RETURN v_reservation_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- ====================================================================================
+-- FUNCTION fn_get_registrations_by_reservation returns all registrations for a
+-- given reservation id with full room and room type details.
+-- ====================================================================================
+
+CREATE OR REPLACE FUNCTION fn_get_registrations_by_reservation(
+    p_reservation_id BIGINT
+)
+RETURNS TABLE (
+    hotel_id BIGINT,
+    room_number INT,
+    floor INT,
+    status_code room_status,
+    room_type_id INT,
+    title TEXT,
+    base_rate NUMERIC(12, 2),
+    max_occupancy INT,
+    bed_count INT,
+    has_balcony BOOLEAN
+)
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        reg.hotel_id,
+        reg.room_number,
+        r.floor,
+        r.status_code,
+        rt.id,
+        rt.title,
+        rt.base_rate,
+        rt.max_occupancy,
+        rt.bed_count,
+        rt.has_balcony
+    FROM registration reg
+    JOIN room r
+        ON r.hotel_id = reg.hotel_id
+        AND r.number = reg.room_number
+    JOIN room_type rt
+        ON rt.id = r.room_type_id
+    WHERE reg.reservation_id = p_reservation_id
+    ORDER BY reg.hotel_id, reg.room_number;
+END;
+$$ LANGUAGE plpgsql;
