@@ -26,10 +26,10 @@ DROP TABLE IF EXISTS department;
 DROP TABLE IF EXISTS hotel;
 
 -- Types & Extensions
-DROP TYPE IF EXISTS housekeeping_task_type;
-DROP TYPE IF EXISTS reservation_source;
-DROP TYPE IF EXISTS payment_method;
-DROP TYPE IF EXISTS shift_type;
-DROP TYPE IF EXISTS room_status;
+DROP TYPE IF EXISTS housekeeping_task_type CASCADE;
+DROP TYPE IF EXISTS reservation_source CASCADE;
+DROP TYPE IF EXISTS payment_method CASCADE;
+DROP TYPE IF EXISTS shift_type CASCADE;
+DROP TYPE IF EXISTS room_status CASCADE;
 DROP EXTENSION IF EXISTS citext;
 DROP EXTENSION IF EXISTS pgcrypto;

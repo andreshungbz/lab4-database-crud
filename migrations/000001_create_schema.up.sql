@@ -56,7 +56,7 @@ CREATE TABLE guest (
 
 CREATE TABLE employee (
     id BIGINT PRIMARY KEY REFERENCES person(id) ON DELETE CASCADE,
-    hotel_id BIGINT NOT NULL REFERENCES hotel(id),
+    hotel_id BIGINT NOT NULL REFERENCES hotel(id) ON DELETE CASCADE,
     department TEXT NOT NULL REFERENCES department(dept_name),
     reports_to BIGINT REFERENCES employee(id),
     salary NUMERIC(18, 2) NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE room_type (
 CREATE TABLE room (
     hotel_id INT REFERENCES hotel(id) ON DELETE CASCADE,
     number INT,
-    room_type_id INT NOT NULL REFERENCES room_type(id),
+    room_type_id INT NOT NULL REFERENCES room_type(id) ON DELETE CASCADE,
     floor INT NOT NULL,
     status_code room_status NOT NULL DEFAULT 'V/C',
     PRIMARY KEY (hotel_id, number)
@@ -110,7 +110,7 @@ CREATE TABLE room (
 
 CREATE TABLE reservation (
     id BIGSERIAL PRIMARY KEY,
-    guest_id BIGINT NOT NULL REFERENCES guest(id),
+    guest_id BIGINT NOT NULL REFERENCES guest(id) ON DELETE CASCADE,
     checkin_date DATE NOT NULL,
     checkout_date DATE NOT NULL CHECK (checkout_date > checkin_date),
     payment_amount NUMERIC(12, 2) NOT NULL,
