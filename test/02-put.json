@@ -1,0 +1,9 @@
+{
+  "contact_email": "newtest@example.com",
+  "contact_phone": "501-000-0000",
+  "name": "Test Example",
+  "gender": "M",
+  "street": "67 Test Street",
+  "city": "Belmopan",
+  "country": "Belize"
+}

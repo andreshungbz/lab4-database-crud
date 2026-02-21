@@ -108,3 +108,28 @@ build/api:
 # ==================================================================================== #
 # TESTS
 # ==================================================================================== #
+
+# GET
+.PHONY: test/api/get
+test/api/get:
+	curl -i http://localhost:4000/v1/guests/A1234567
+
+# POST
+.PHONY: test/api/post
+test/api/post:
+	curl -i -X POST http://localhost:4000/v1/guests -d @test/01-post.json
+
+# PUT
+.PHONY: test/api/put
+test/api/put:
+	curl -i -X PUT http://localhost:4000/v1/guests/P0000000 -d @test/02-put.json
+
+# PATCH
+.PHONY: test/api/patch
+test/api/patch:
+	curl -i -X PATCH http://localhost:4000/v1/guests/P0000000 -d @test/03-patch.json
+
+# DELETE
+.PHONY: test/api/delete
+test/api/delete:
+	curl -i -X DELETE http://localhost:4000/v1/guests/P0000000
