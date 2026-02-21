@@ -12,8 +12,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN [ -f .envrc ] || cp .envrc.docker .envrc
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "make db/migrations/up && make run"]
+CMD ["sh", "-c", "cp .envrc.docker .envrc && make db/migrations/up && make run"]
