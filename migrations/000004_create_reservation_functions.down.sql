@@ -28,9 +28,13 @@ DROP FUNCTION IF EXISTS fn_create_reservation_base(
     INT
 );
 
-DROP FUNCTION IF EXISTS fn_get_or_create_guest(
+DROP FUNCTION IF EXISTS fn_create_guest(
     TEXT, CITEXT, TEXT,
     TEXT, TEXT, TEXT, TEXT, TEXT
+);
+
+DROP FUNCTION IF EXISTS fn_get_guest_by_passport(
+    TEXT
 );
 
 DROP FUNCTION IF EXISTS fn_calculate_payment(

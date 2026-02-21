@@ -75,11 +75,48 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- ====================================================================================
--- FUNCTION fn_get_or_create_guest returns the guest and person data for an existing
--- guest or a newly created guest based on the passed passport.
+-- FUNCTION fn_get_guest_by_passport returns the guest and person data for an existing
+-- guest.
+-- ====================================================================================
+CREATE OR REPLACE FUNCTION fn_get_guest_by_passport(
+    p_passport TEXT
+)
+RETURNS TABLE (
+    id BIGINT,
+    passport_number TEXT,
+    contact_email CITEXT,
+    contact_phone TEXT,
+    name TEXT,
+    gender TEXT,
+    street TEXT,
+    city TEXT,
+    country TEXT
+)
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        g.id,
+        g.passport_number,
+        g.contact_email,
+        g.contact_phone,
+        p.name,
+        p.gender,
+        p.street,
+        p.city,
+        p.country
+    FROM guest g
+    JOIN person p ON p.id = g.id
+    WHERE g.passport_number = p_passport;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ====================================================================================
+-- FUNCTION fn_create_guest returns the guest and person data for a newly created
+-- guest from on the passed passport and guest details.
 -- ====================================================================================
 
-CREATE OR REPLACE FUNCTION fn_get_or_create_guest(
+CREATE OR REPLACE FUNCTION fn_create_guest(
     -- guest attributes
     p_passport TEXT,
     p_contact_email CITEXT,
@@ -106,32 +143,15 @@ AS $$
 DECLARE
     v_guest_id BIGINT;
 BEGIN
-    -- find guest id based on passport number
-    SELECT g.id
-    INTO v_guest_id
-    FROM guest g
-    WHERE g.passport_number = p_passport;
+    -- insert person entry
+    INSERT INTO person (name, gender, street, city, country)
+    VALUES (p_name, p_gender, p_street, p_city, p_country)
+    RETURNING id INTO v_guest_id;
 
-    -- if not found, create guest
-    IF v_guest_id IS NULL THEN
-        BEGIN
-            INSERT INTO person (name, gender, street, city, country)
-            VALUES (p_name, p_gender, p_street, p_city, p_country)
-            RETURNING person.id INTO v_guest_id;
+    -- insert guest entry
+    INSERT INTO guest (id, passport_number, contact_email, contact_phone)
+    VALUES (v_guest_id, p_passport, p_contact_email, p_contact_phone);
 
-            INSERT INTO guest (id, passport_number, contact_email, contact_phone)
-            VALUES (v_guest_id, p_passport, p_contact_email, p_contact_phone);
-
-        EXCEPTION WHEN unique_violation THEN
-            -- handle concurrent insert
-            SELECT g.id
-            INTO v_guest_id
-            FROM guest g
-            WHERE g.passport_number = p_passport;
-        END;
-    END IF;
-
-    -- return full guest + person data
     RETURN QUERY
     SELECT
         g.id,
