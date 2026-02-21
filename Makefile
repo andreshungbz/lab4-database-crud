@@ -114,6 +114,16 @@ build/api:
 test/api/get:
 	curl -i http://localhost:4000/v1/guests/A1234567
 
+# GET ALL
+.PHONY: test/api/get-all
+test/api/get-all:
+	curl -i http://localhost:4000/v1/guests
+
+# GET ALL (filtered by name)
+.PHONY: test/api/get-all-name
+test/api/get-all-name:
+	curl -i http://localhost:4000/v1/guests?name=ra
+
 # POST
 .PHONY: test/api/post
 test/api/post:
