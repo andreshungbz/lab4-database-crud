@@ -1,0 +1,1 @@
+export HOTEL_DB_DSN=postgres://hotel_user:hotel_password@localhost/hotel?sslmode=disable
