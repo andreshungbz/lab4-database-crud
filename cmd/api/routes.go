@@ -30,5 +30,5 @@ func (app *application) routes() http.Handler {
 	// Metrics debugging route
 	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
 
-	return app.recoverPanic(router)
+	return app.recoverPanic(app.rateLimit(router))
 }

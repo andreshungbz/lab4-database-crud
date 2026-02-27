@@ -29,6 +29,11 @@ type config struct {
 	db   struct {
 		dsn string // data source name
 	}
+	limiter struct {
+		rps     float64
+		burst   int
+		enabled bool
+	}
 }
 
 // application holds the dependencies for the HTTP handlers, helpers, middleware,
@@ -46,11 +51,19 @@ func main() {
 
 	// FLAGS
 
+	// server flags
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
 
+	// database flags
 	flag.StringVar(&cfg.db.dsn, "db-dsn", "", "PostgreSQL DSN")
 
+	// rate-limiter flags
+	flag.Float64Var(&cfg.limiter.rps, "limiter-rps", 2, "Rate limiter maximum requests per second")
+	flag.IntVar(&cfg.limiter.burst, "limiter-burst", 4, "Rate limiter maximum burst")
+	flag.BoolVar(&cfg.limiter.enabled, "limiter-enabled", true, "Enable rate limiter")
+
+	// version flag
 	displayVersion := flag.Bool("version", false, "Display program version")
 
 	flag.Parse()
