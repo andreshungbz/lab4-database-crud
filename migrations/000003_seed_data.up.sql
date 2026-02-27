@@ -69,7 +69,12 @@ INSERT INTO person (name, gender, street, city, country) VALUES
     ('Greg Jones', 'M', '34 Pine St', 'San Pedro', 'Belize'),
     ('Lara Bennett', 'F', '56 Palm St', 'San Pedro', 'Belize'),
     ('Tom Rivera', 'M', '78 Mango St', 'San Pedro', 'Belize'),
-    ('Nina Patel', 'F', '90 Oak St', 'San Pedro', 'Belize');
+    ('Nina Patel', 'F', '90 Oak St', 'San Pedro', 'Belize'),
+    ('Carlos Mendez', 'M', '123 Reforma Ave', 'Mexico City', 'Mexico'),
+    ('Sofia Alvarez', 'F', '456 Juarez St', 'Guadalajara', 'Mexico'),
+    ('Daniel Thompson', 'M', '789 Maple Rd', 'Toronto', 'Canada'),
+    ('Emily Chen', 'F', '321 Oakwood Dr', 'Vancouver', 'Canada'),
+    ('Lucas Silva', 'M', '654 Copacabana Ave', 'Rio de Janeiro', 'Brazil');
 
 INSERT INTO guest (id, passport_number, contact_email, contact_phone)
     SELECT id, 'A1234567', 'mae@example.com', '501-111-1234'
@@ -95,6 +100,31 @@ INSERT INTO guest (id, passport_number, contact_email, contact_phone)
     SELECT id, 'E9988776', 'nina@example.com', '501-111-4567'
     FROM person
     WHERE name='Nina Patel';
+
+INSERT INTO guest (id, passport_number, contact_email, contact_phone)
+    SELECT id, 'M1238901', 'carlos@example.com', '52-555-123-4567'
+    FROM person
+    WHERE name='Carlos Mendez';
+
+INSERT INTO guest (id, passport_number, contact_email, contact_phone)
+    SELECT id, 'M9876540', 'sofia@example.com', '52-333-987-6543'
+    FROM person
+    WHERE name='Sofia Alvarez';
+
+INSERT INTO guest (id, passport_number, contact_email, contact_phone)
+    SELECT id, 'CA1123581', 'daniel@example.com', '1-416-555-7890'
+    FROM person
+    WHERE name='Daniel Thompson';
+
+INSERT INTO guest (id, passport_number, contact_email, contact_phone)
+    SELECT id, 'CA2233445', 'emily@example.com', '1-604-555-2468'
+    FROM person
+    WHERE name='Emily Chen';
+
+INSERT INTO guest (id, passport_number, contact_email, contact_phone)
+    SELECT id, 'BR4455667', 'lucas@example.com', '55-21-99999-8888'
+    FROM person
+    WHERE name='Lucas Silva';
 
 -- ====================================================================================
 -- ROOM TYPE & ROOM

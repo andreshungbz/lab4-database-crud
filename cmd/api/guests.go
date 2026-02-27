@@ -92,22 +92,46 @@ func (app *application) showGuestHandler(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-// listGuestsHandler returns JSON of all guests. It can be filtered by the
-// guest's name.
+// listGuestsHandler returns JSON of all guests. Filters, pagination, and sorting
+// applicable.
 func (app *application) listGuestsHandler(w http.ResponseWriter, r *http.Request) {
-	// read the name URL key
-	qs := r.URL.Query()
-	name := app.readString(qs, "name", "")
+	// create input for filters (pagination + sort)
+	var input struct {
+		Name    string
+		Country string
+		data.Filters
+	}
 
-	// retrieve records from the database
-	guests, err := app.models.Guest.GetAll(name)
+	// create validator and url.Values map
+	v := validator.New()
+	qs := r.URL.Query()
+
+	// read parameters for filtering (search, pagination and sorting)
+	input.Name = app.readString(qs, "name", "")                        // guest name
+	input.Country = app.readString(qs, "country", "")                  // guest country
+	input.Filters.Page = app.readInt(qs, "page", 1, v)                 // default: 1st page
+	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)       // default: 20 items per page
+	input.Filters.Sort = app.readString(qs, "sort", "passport_number") // default: sort by passport number ascending
+	input.Filters.SortSafelist = []string{                             // allowed sorting options
+		"passport_number", "name", "created_at",
+		"-passport_number", "-name", "-created_at",
+	}
+
+	// validate filters
+	if data.ValidateFilters(v, input.Filters); !v.Valid() {
+		app.failedValidationResponse(w, r, v.Errors)
+		return
+	}
+
+	// retrieve records and pagination metadata from the database
+	guests, metadata, err := app.models.Guest.GetAll(input.Name, input.Country, input.Filters)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
 	// return JSON response of the list of guests
-	err = app.writeJSON(w, http.StatusOK, envelope{"guests": guests}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"guests": guests, "metadata": metadata}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}

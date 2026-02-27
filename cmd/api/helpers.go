@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/andreshungbz/lab4-database-crud/internal/validator"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -111,7 +112,7 @@ func (app *application) readIDParam(r *http.Request) (int64, error) {
 
 	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
 	if err != nil || id < 1 { // ensure the id is positive
-		return 0, errors.New("invalid id parameter")
+		return 0, errors.New("Invalid id parameter")
 	}
 
 	return id, nil
@@ -133,4 +134,33 @@ func (app *application) readString(qs url.Values, key string, defaultValue strin
 	}
 
 	return s
+}
+
+// readCSV parses a comma-separated list of key values.
+func (app *application) readCSV(qs url.Values, key string, defaultValue []string) []string {
+	csv := qs.Get(key)
+
+	if csv == "" {
+		return defaultValue
+	}
+
+	return strings.Split(csv, ",")
+}
+
+// readInt returns the integer value of a specified URL key. It validates the conversion
+// from string to integer.
+func (app *application) readInt(qs url.Values, key string, defaultValue int, v *validator.Validator) int {
+	s := qs.Get(key)
+
+	if s == "" {
+		return defaultValue
+	}
+
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		v.AddError(key, "Must be an integer value")
+		return defaultValue
+	}
+
+	return i
 }

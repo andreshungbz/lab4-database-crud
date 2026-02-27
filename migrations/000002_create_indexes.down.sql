@@ -23,3 +23,6 @@ DROP INDEX IF EXISTS idx_housekeeping_created;
 DROP INDEX IF EXISTS idx_maintenance_housekeeper;
 DROP INDEX IF EXISTS idx_maintenance_room;
 DROP INDEX IF EXISTS idx_maintenance_created;
+
+DROP INDEX IF EXISTS idx_person_name;
+DROP INDEX IF EXISTS idx_person_country;

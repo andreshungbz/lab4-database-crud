@@ -122,7 +122,12 @@ test/api/get-all:
 # GET ALL (filtered by name)
 .PHONY: test/api/get-all-name
 test/api/get-all-name:
-	curl -i http://localhost:4000/v1/guests?name=ra
+	curl -i http://localhost:4000/v1/guests?name=mae
+
+# GET ALL (filters, pagination and sorting) (note that quotes are necessary)
+.PHONY: test/api/get-all-filters
+test/api/get-all-filters:
+	curl -i "http://localhost:4000/v1/guests?country=belize&page=1&page_size=3&sort=-passport_number"
 
 # POST
 .PHONY: test/api/post

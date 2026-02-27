@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/andreshungbz/lab4-database-crud/internal/validator"
@@ -94,10 +95,16 @@ func (g GuestModel) Get(passport string) (*Guest, error) {
 	return &guest, nil
 }
 
-// GetAll reads all guests in the database, filtered by name.
-func (g GuestModel) GetAll(name string) ([]*Guest, error) {
-	query := `
-		SELECT 
+// GetAll reads all guests in the database, filterable.
+func (g GuestModel) GetAll(name string, country string, filters Filters) ([]*Guest, Metadata, error) {
+	// PostgreSQL full-text search notes
+	// - to_tsvector in simple configuration breaks string to lower case lexemes.
+	// - plainto_tsquery in simple configuration normalizes the query term.
+	//		e.g. "John Smith" -> 'john' + 'smith'
+	// - @@ is the matches operator.
+	query := fmt.Sprintf(`
+		SELECT
+			count(*) OVER(), 
 			g.id,
 			g.passport_number,
 			g.contact_email,
@@ -110,25 +117,31 @@ func (g GuestModel) GetAll(name string) ([]*Guest, error) {
 			p.created_at
 		FROM guest g
 		JOIN person p ON p.id = g.id
-		WHERE ($1 = '' OR p.name ILIKE '%' || $1 || '%')
-		ORDER BY g.passport_number ASC`
+		WHERE (to_tsvector('simple', name) @@ plainto_tsquery('simple', $1) OR $1 = '')
+		AND (to_tsvector('simple', country) @@ plainto_tsquery('simple', $2) OR $2 = '')
+		ORDER BY %s %s, id ASC
+		LIMIT $3 OFFSET $4`, filters.sortColumn(), filters.sortDirection())
+
+	args := []any{name, country, filters.limit(), filters.offset()}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	// retrieves rows from the database
-	rows, err := g.DB.QueryContext(ctx, query, name)
+	rows, err := g.DB.QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
 	defer rows.Close()
 
 	// construct the array of guests
+	totalRecords := 0
 	guests := []*Guest{}
 	for rows.Next() {
 		var guest Guest
 
 		err := rows.Scan(
+			&totalRecords,
 			// scan all attributes
 			&guest.ID,
 			&guest.PassportNumber,
@@ -142,17 +155,20 @@ func (g GuestModel) GetAll(name string) ([]*Guest, error) {
 			&guest.CreatedAt,
 		)
 		if err != nil {
-			return nil, err
+			return nil, Metadata{}, err
 		}
 
 		guests = append(guests, &guest)
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil, Metadata{}, err
 	}
 
-	return guests, nil
+	// construct Metadata object
+	metadata := calculateMetadata(totalRecords, filters.Page, filters.PageSize)
+
+	return guests, metadata, nil
 }
 
 // Update modifies the appropriate person and guest records for a guest.
