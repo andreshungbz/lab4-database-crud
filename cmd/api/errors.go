@@ -33,13 +33,13 @@ func (app *application) serverErrorResponse(w http.ResponseWriter, r *http.Reque
 
 // notFound Response sends a 404 HTTP status code.
 func (app *application) notFoundResponse(w http.ResponseWriter, r *http.Request) {
-	message := "the requested resource could not be found"
+	message := "The requested resource could not be found"
 	app.errorResponse(w, r, http.StatusNotFound, message)
 }
 
 // methodNotAllowedResponse sends a 405 HTTP status code.
 func (app *application) methodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
-	message := fmt.Sprintf("the %s method is not supported for this resource", r.Method)
+	message := fmt.Sprintf("The %s method is not supported for this resource", r.Method)
 	app.errorResponse(w, r, http.StatusMethodNotAllowed, message)
 }
 
@@ -56,7 +56,7 @@ func (app *application) failedValidationResponse(w http.ResponseWriter, r *http.
 
 // editConflictResponse sends a 409 HTTP status code for concurrency conflicts
 func (app *application) editConflictResponse(w http.ResponseWriter, r *http.Request) {
-	message := "unable to update the record due to an edit conflict, please try again"
+	message := "Unable to update the record due to an edit conflict, please try again"
 	app.errorResponse(w, r, http.StatusConflict, message)
 }
 
