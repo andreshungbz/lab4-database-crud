@@ -1,4 +1,4 @@
--- migrations/000003_seed_data.down.sql
+-- migrations/000004_seed_data.down.sql
 -- Delete data and reset sequences.
 
 DELETE FROM maintenance_report;

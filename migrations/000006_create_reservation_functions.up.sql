@@ -1,4 +1,4 @@
--- migrations/000005_create_reservation_functions.up.sql
+-- migrations/000006_create_reservation_functions.up.sql
 -- Creates functions for reservations and registrations.
 
 -- ====================================================================================
@@ -39,6 +39,7 @@ RETURNS TABLE (
     room_number INT,
     floor INT,
     status_code room_status,
+    modified_at TIMESTAMP(0) WITH TIME ZONE,
     room_type_id INT,
     title TEXT,
     base_rate NUMERIC(12, 2),
@@ -54,6 +55,7 @@ BEGIN
         reg.room_number,
         r.floor,
         r.status_code,
+        r.modified_at,
         rt.id,
         rt.title,
         rt.base_rate,

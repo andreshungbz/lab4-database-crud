@@ -1,4 +1,4 @@
--- migrations/000004_create_guest_functions.up.sql
+-- migrations/000005_create_guest_functions.up.sql
 -- Creates functions for guests.
 
 -- ====================================================================================
@@ -62,7 +62,8 @@ RETURNS TABLE (
     street TEXT,
     city TEXT,
     country TEXT,
-    created_at TIMESTAMP(0) WITH TIME ZONE
+    created_at TIMESTAMP(0) WITH TIME ZONE,
+    modified_at TIMESTAMP(0) WITH TIME ZONE
 )
 AS $$
 BEGIN
@@ -77,7 +78,8 @@ BEGIN
         p.street,
         p.city,
         p.country,
-        p.created_at
+        p.created_at,
+        p.modified_at
     FROM guest g
     JOIN person p ON p.id = g.id
     WHERE g.passport_number = p_passport;

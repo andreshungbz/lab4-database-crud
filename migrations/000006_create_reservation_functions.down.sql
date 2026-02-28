@@ -1,4 +1,4 @@
--- migrations/000005_create_reservation_functions.down.sql
+-- migrations/000006_create_reservation_functions.down.sql
 -- Drops all functions for reservations and registrations in reverse order of their creation.
 
 DROP FUNCTION IF EXISTS fn_create_reservation_workflow(

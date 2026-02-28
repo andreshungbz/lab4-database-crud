@@ -1,4 +1,4 @@
--- migrations/000003_seed_data.up.sql
+-- migrations/000004_seed_data.up.sql
 -- Inserts example data to work with.
 
 -- ====================================================================================
@@ -151,8 +151,8 @@ INSERT INTO room (hotel_id, number, room_type_id, floor, status_code) VALUES
 
 -- Room 101: O/C (single-room reservation)
 
-INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source, canceled)
-    SELECT id, '2026-03-01', '2026-03-05', 600, 'cash', 'direct', FALSE
+INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source)
+    SELECT id, '2026-06-01', '2026-06-05', 600, 'cash', 'direct'
     FROM guest
     WHERE passport_number='A1234567';
 
@@ -164,8 +164,8 @@ INSERT INTO registration (reservation_id, hotel_id, room_number)
 
 -- Room 102 & 201: O/C (multi-room reservation)
 
-INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source, canceled)
-    SELECT id, '2026-03-02', '2026-03-06', 300, 'credit_card', 'direct', FALSE
+INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source)
+    SELECT id, '2026-06-02', '2026-06-06', 300, 'credit_card', 'Booking.com'
     FROM guest
     WHERE passport_number='C1122334';
 
@@ -183,8 +183,8 @@ INSERT INTO registration (reservation_id, hotel_id, room_number)
 
 -- Room 202: O/D
 
-INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source, canceled)
-    SELECT id, '2026-03-04', '2026-03-08', 100, 'debit_card', 'Expedia', FALSE
+INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source)
+    SELECT id, '2026-06-04', '2026-06-08', 100, 'debit_card', 'Expedia'
     FROM guest
     WHERE passport_number='D5566778';
 
@@ -196,8 +196,8 @@ INSERT INTO registration (reservation_id, hotel_id, room_number)
 
 -- Room 301: V/D
 
-INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source, canceled)
-    SELECT id, '2026-03-12', '2026-03-13', 250, 'debit_card', 'Booking.com', FALSE
+INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source)
+    SELECT id, '2026-06-12', '2026-06-13', 250, 'debit_card', 'Booking.com'
     FROM guest
     WHERE passport_number='E9988776';
 
@@ -207,19 +207,36 @@ INSERT INTO registration (reservation_id, hotel_id, room_number)
     JOIN guest g ON r.guest_id = g.id
     WHERE g.passport_number='E9988776';
 
+-- Room 302: V/C (canceled)
+
+INSERT INTO reservation (guest_id, checkin_date, checkout_date, payment_amount, payment_method, source, completed, canceled)
+    SELECT id, '2026-06-14', '2026-06-15', 300, 'cash', 'direct', TRUE, TRUE
+    FROM guest
+    WHERE passport_number='M1238901';
+
+INSERT INTO registration (reservation_id, hotel_id, room_number)
+    SELECT r.id, 1, 302
+    FROM reservation r
+    JOIN guest g ON r.guest_id = g.id
+    WHERE g.passport_number='M1238901';
+
 -- ====================================================================================
 -- HOUSEKEEPING ACTIVITIES
 -- ====================================================================================
 
-INSERT INTO housekeeping_task (hotel_id, room_number, housekeeper_id, task_type, completed_at) VALUES
-    (1, 101, 3, 'bed', '2026-02-18 09:00:00'),
-    (1, 102, 3, 'bathroom', NULL),
-    (1, 201, 3, 'bed', NULL),
-    (1, 202, 3, 'bathroom', '2026-02-19 14:30:00'),
-    (1, 101, 3, 'dusting', '2026-02-18 15:45:00');
+INSERT INTO housekeeping_task (hotel_id, room_number, housekeeper_id, task_type) VALUES
+    (1, 102, 3, 'bathroom'),
+    (1, 201, 3, 'bed');
 
-INSERT INTO maintenance_report (hotel_id, room_number, housekeeper_id, description, completed_at) VALUES
-    (1, 201, 3, 'Air conditioning not working', NULL),
-    (1, 102, 3, 'Leaky faucet', NULL),
-    (1, 101, 3, 'Broken light fixture', '2026-02-17 11:20:00'),
-    (1, 102, 3, 'Window lock broken', NULL);
+INSERT INTO housekeeping_task (hotel_id, room_number, housekeeper_id, task_type, modified_at, completed) VALUES
+    (1, 101, 3, 'bed', '2026-06-18 09:00:00', TRUE),
+    (1, 202, 3, 'bathroom', '2026-06-19 14:30:00', TRUE),
+    (1, 101, 3, 'dusting', '2026-06-18 15:45:00', TRUE);
+
+INSERT INTO maintenance_report (hotel_id, room_number, housekeeper_id, description) VALUES
+    (1, 201, 3, 'Air conditioning not working'),
+    (1, 102, 3, 'Leaky faucet'),
+    (1, 102, 3, 'Window lock broken');
+
+INSERT INTO maintenance_report (hotel_id, room_number, housekeeper_id, description, modified_at, completed) VALUES
+    (1, 101, 3, 'Broken light fixture', '2026-06-17 11:20:00', TRUE);

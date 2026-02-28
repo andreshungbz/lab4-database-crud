@@ -1,4 +1,4 @@
--- migrations/000004_create_guest_functions.down.sql
+-- migrations/000005_create_guest_functions.down.sql
 -- Drops all functions for guests in reverse order of their creation.
 
 DROP FUNCTION IF EXISTS fn_delete_guest(
