@@ -20,7 +20,8 @@ CREATE OR REPLACE FUNCTION fn_create_guest(
 )
 RETURNS TABLE (
     id BIGINT,
-    created_at TIMESTAMP(0) WITH TIME ZONE
+    created_at TIMESTAMP(0) WITH TIME ZONE,
+    modified_at TIMESTAMP(0) WITH TIME ZONE
 )
 AS $$
 DECLARE
@@ -38,7 +39,8 @@ BEGIN
     RETURN QUERY
     SELECT
         p.id,
-        p.created_at
+        p.created_at,
+        p.modified_at
     FROM person p
     WHERE p.id = v_guest_id;
 END;

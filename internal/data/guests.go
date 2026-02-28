@@ -18,12 +18,13 @@ type Guest struct {
 	ContactEmail   string `json:"contact_email"`
 	ContactPhone   string `json:"contact_phone"`
 	// person attributes
-	Name      string    `json:"name"`
-	Gender    string    `json:"gender"`
-	Street    string    `json:"street"`
-	City      string    `json:"city"`
-	Country   string    `json:"country"`
-	CreatedAt time.Time `json:"-"`
+	Name       string    `json:"name"`
+	Gender     string    `json:"gender"`
+	Street     string    `json:"street"`
+	City       string    `json:"city"`
+	Country    string    `json:"country"`
+	CreatedAt  time.Time `json:"-"`
+	ModifiedAt time.Time `json:"-"`
 }
 
 // ValidateGuest checks for the passport number.
@@ -58,6 +59,7 @@ func (g GuestModel) Insert(guest *Guest) error {
 		// scan remaining attributes
 		&guest.ID,
 		&guest.CreatedAt,
+		&guest.ModifiedAt,
 	)
 }
 
@@ -81,6 +83,7 @@ func (g GuestModel) Get(passport string) (*Guest, error) {
 		&guest.City,
 		&guest.Country,
 		&guest.CreatedAt,
+		&guest.ModifiedAt,
 	)
 
 	if err != nil {
@@ -114,7 +117,8 @@ func (g GuestModel) GetAll(name string, country string, filters Filters) ([]*Gue
 			p.street,
 			p.city,
 			p.country,
-			p.created_at
+			p.created_at,
+			p.modified_at
 		FROM guest g
 		JOIN person p ON p.id = g.id
 		WHERE (to_tsvector('simple', name) @@ plainto_tsquery('simple', $1) OR $1 = '')
@@ -154,6 +158,7 @@ func (g GuestModel) GetAll(name string, country string, filters Filters) ([]*Gue
 			&guest.City,
 			&guest.Country,
 			&guest.CreatedAt,
+			&guest.ModifiedAt,
 		)
 		if err != nil {
 			return nil, Metadata{}, err
