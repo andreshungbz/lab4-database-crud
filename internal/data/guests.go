@@ -122,6 +122,7 @@ func (g GuestModel) GetAll(name string, country string, filters Filters) ([]*Gue
 		ORDER BY %s %s, id ASC
 		LIMIT $3 OFFSET $4`, filters.sortColumn(), filters.sortDirection())
 
+	// limit is used for page_size, and offset is used for page
 	args := []any{name, country, filters.limit(), filters.offset()}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

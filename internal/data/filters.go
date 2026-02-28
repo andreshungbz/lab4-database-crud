@@ -12,7 +12,7 @@ type Filters struct {
 	Page         int
 	PageSize     int
 	Sort         string
-	SortSafelist []string
+	SortSafelist []string // the valid string values for a sort column
 }
 
 // sortColumn parses the column to be sorted.
