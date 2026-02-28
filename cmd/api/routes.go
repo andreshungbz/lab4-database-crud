@@ -19,6 +19,11 @@ func (app *application) routes() http.Handler {
 	// Healthcheck route
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
 
+	// Metrics debugging route
+	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
+
+	// DATABASE SCHEMA ROUTES
+
 	// Guest routes
 	router.HandlerFunc(http.MethodGet, "/v1/guests/:passport", app.showGuestHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/guests", app.listGuestsHandler)
@@ -27,8 +32,13 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/guests/:passport", app.updateGuestHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/guests/:passport", app.deleteGuestHandler)
 
-	// Metrics debugging route
-	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
+	// Room Type routes
+	router.HandlerFunc(http.MethodGet, "/v1/room-types/:id", app.showRoomTypeHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/room-types", app.listRoomTypesHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/room-types", app.createRoomTypeHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/room-types/:id", app.updateRoomTypeHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/room-types/:id", app.updateRoomTypeHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/room-types/:id", app.deleteRoomTypeHandler)
 
 	return app.recoverPanic(app.enableCORS(app.rateLimit(router)))
 }

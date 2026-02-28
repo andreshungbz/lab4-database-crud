@@ -12,12 +12,14 @@ var (
 
 // Models groups all database models used in the application.
 type Models struct {
-	Guest GuestModel
+	Guest    GuestModel
+	RoomType RoomTypeModel
 }
 
 // NewModels returns all Models configured with the database handler.
 func NewModels(db *sql.DB) Models {
 	return Models{
-		Guest: GuestModel{DB: db},
+		Guest:    GuestModel{DB: db},
+		RoomType: RoomTypeModel{DB: db},
 	}
 }
