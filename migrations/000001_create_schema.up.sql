@@ -18,7 +18,7 @@ CREATE TYPE housekeeping_task_type AS ENUM ('bed', 'bathroom', 'dusting');
 -- HOTEL & DEPARTMENT
 -- ====================================================================================
 
-CREATE TABLE hotel (
+CREATE TABLE IF NOT EXISTS hotel (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     street TEXT NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE hotel (
     phone TEXT NOT NULL
 );
 
-CREATE TABLE department (
+CREATE TABLE IF NOT EXISTS department (
     dept_name TEXT PRIMARY KEY,
     budget NUMERIC(18, 2)
 );
@@ -37,24 +37,25 @@ CREATE TABLE department (
 -- PERSONS
 -- ====================================================================================
 
-CREATE TABLE person (
+CREATE TABLE IF NOT EXISTS person (
     id BIGSERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     gender TEXT,
     street TEXT,
     city TEXT,
     country TEXT,
-    created_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE guest (
+CREATE TABLE IF NOT EXISTS guest (
     id BIGINT PRIMARY KEY REFERENCES person(id) ON DELETE CASCADE,
     passport_number TEXT UNIQUE NOT NULL,
     contact_email CITEXT NOT NULL,
     contact_phone TEXT NOT NULL
 );
 
-CREATE TABLE employee (
+CREATE TABLE IF NOT EXISTS employee (
     id BIGINT PRIMARY KEY REFERENCES person(id) ON DELETE CASCADE,
     hotel_id BIGINT NOT NULL REFERENCES hotel(id) ON DELETE CASCADE,
     department TEXT NOT NULL REFERENCES department(dept_name),
@@ -67,17 +68,17 @@ CREATE TABLE employee (
     employed BOOLEAN NOT NULL DEFAULT TRUE
 );
 
-CREATE TABLE operations_manager (
+CREATE TABLE IF NOT EXISTS operations_manager (
     id BIGINT PRIMARY KEY REFERENCES employee(id) ON DELETE CASCADE,
     hotel_owner BOOLEAN NOT NULL
 );
 
-CREATE TABLE front_desk (
+CREATE TABLE IF NOT EXISTS front_desk (
     id BIGINT PRIMARY KEY REFERENCES employee(id) ON DELETE CASCADE,
     shift shift_type NOT NULL
 );
 
-CREATE TABLE housekeeper (
+CREATE TABLE IF NOT EXISTS housekeeper (
     id BIGINT PRIMARY KEY REFERENCES employee(id) ON DELETE CASCADE,
     shift shift_type NOT NULL
 );
@@ -86,7 +87,7 @@ CREATE TABLE housekeeper (
 -- ROOM TYPE & ROOM
 -- ====================================================================================
 
-CREATE TABLE room_type (
+CREATE TABLE IF NOT EXISTS room_type (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     base_rate NUMERIC(12, 2) NOT NULL,
@@ -95,12 +96,13 @@ CREATE TABLE room_type (
     has_balcony BOOLEAN NOT NULL
 );
 
-CREATE TABLE room (
+CREATE TABLE IF NOT EXISTS room (
     hotel_id INT REFERENCES hotel(id) ON DELETE CASCADE,
     number INT,
     room_type_id INT NOT NULL REFERENCES room_type(id) ON DELETE CASCADE,
     floor INT NOT NULL,
     status_code room_status NOT NULL DEFAULT 'V/C',
+    modified_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW(),
     PRIMARY KEY (hotel_id, number)
 );
 
@@ -108,7 +110,7 @@ CREATE TABLE room (
 -- RESERVATIONS
 -- ====================================================================================
 
-CREATE TABLE reservation (
+CREATE TABLE IF NOT EXISTS reservation (
     id BIGSERIAL PRIMARY KEY,
     guest_id BIGINT NOT NULL REFERENCES guest(id) ON DELETE CASCADE,
     checkin_date DATE NOT NULL,
@@ -116,12 +118,13 @@ CREATE TABLE reservation (
     payment_amount NUMERIC(12, 2) NOT NULL,
     payment_method payment_method NOT NULL,
     source reservation_source NOT NULL,
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
     canceled BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMP(0) WITH TIME ZONE DEFAULT NOW(),
-    completed_at TIMESTAMP(0) WITH TIME ZONE
+    created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    modified_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE registration (
+CREATE TABLE IF NOT EXISTS registration (
     reservation_id BIGINT REFERENCES reservation(id) ON DELETE CASCADE,
     hotel_id BIGINT NOT NULL,
     room_number INT NOT NULL,
@@ -135,27 +138,29 @@ CREATE TABLE registration (
 -- HOUSEKEEPING ACTIVITIES
 -- ====================================================================================
 
-CREATE TABLE housekeeping_task (
+CREATE TABLE IF NOT EXISTS housekeeping_task (
     id BIGSERIAL PRIMARY KEY,
     hotel_id BIGINT NOT NULL,
     room_number INT NOT NULL,
     housekeeper_id BIGINT REFERENCES housekeeper(id),
     task_type housekeeping_task_type NOT NULL,
     created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    completed_at TIMESTAMP(0) WITH TIME ZONE,
+    modified_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (hotel_id, room_number)
         REFERENCES room(hotel_id, number)
         ON DELETE CASCADE
 );
 
-CREATE TABLE maintenance_report (
+CREATE TABLE IF NOT EXISTS maintenance_report (
     id BIGSERIAL PRIMARY KEY,
     hotel_id BIGINT NOT NULL,
     room_number INT NOT NULL,
     housekeeper_id BIGINT NOT NULL REFERENCES housekeeper(id),
     description TEXT NOT NULL,
     created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    completed_at TIMESTAMP(0) WITH TIME ZONE,
+    modified_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (hotel_id, room_number)
         REFERENCES room(hotel_id, number)
         ON DELETE CASCADE
