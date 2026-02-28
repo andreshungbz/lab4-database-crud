@@ -109,42 +109,46 @@ build/api:
 # TESTS
 # ==================================================================================== #
 
+# ==================================================================================== #
+# Guest Model
+# ==================================================================================== #
+
 # GET
-.PHONY: test/api/get
-test/api/get:
+.PHONY: test/api/guests/get
+test/api/guests/get:
 	curl -i http://localhost:4000/v1/guests/A1234567
 
 # GET ALL
-.PHONY: test/api/get-all
-test/api/get-all:
+.PHONY: test/api/guests/get-all
+test/api/guests/get-all:
 	curl -i http://localhost:4000/v1/guests
 
 # GET ALL (filtered by name)
-.PHONY: test/api/get-all-name
-test/api/get-all-name:
+.PHONY: test/api/guests/get-all-name
+test/api/guests/get-all-name:
 	curl -i http://localhost:4000/v1/guests?name=mae
 
 # GET ALL (filters, pagination and sorting) (note that quotes are necessary)
-.PHONY: test/api/get-all-filters
-test/api/get-all-filters:
+.PHONY: test/api/guests/get-all-filters
+test/api/guests/get-all-filters:
 	curl -i "http://localhost:4000/v1/guests?country=belize&page=1&page_size=3&sort=-passport_number"
 
 # POST
-.PHONY: test/api/post
-test/api/post:
+.PHONY: test/api/guests/post
+test/api/guests/post:
 	curl -i -X POST http://localhost:4000/v1/guests -d @test/01-post.json
 
 # PUT
-.PHONY: test/api/put
-test/api/put:
+.PHONY: test/api/guests/put
+test/api/guests/put:
 	curl -i -X PUT http://localhost:4000/v1/guests/P0000000 -d @test/02-put.json
 
 # PATCH
-.PHONY: test/api/patch
-test/api/patch:
+.PHONY: test/api/guests/patch
+test/api/guests/patch:
 	curl -i -X PATCH http://localhost:4000/v1/guests/P0000000 -d @test/03-patch.json
 
 # DELETE
-.PHONY: test/api/delete
-test/api/delete:
+.PHONY: test/api/guests/delete
+test/api/guests/delete:
 	curl -i -X DELETE http://localhost:4000/v1/guests/P0000000
