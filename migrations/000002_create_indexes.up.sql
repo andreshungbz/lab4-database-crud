@@ -6,7 +6,7 @@
 
 CREATE INDEX IF NOT EXISTS idx_employee_hotel ON employee(hotel_id);
 CREATE INDEX IF NOT EXISTS idx_employee_department ON employee(department);
-CREATE INDEX IF NOT EXISTS idx_employee_reports_to ON employee(reports_to);
+CREATE INDEX IF NOT EXISTS idx_employee_manager_id ON employee(manager_id);
 
 CREATE INDEX IF NOT EXISTS idx_guest_email ON guest(contact_email); -- likely to be searched
 

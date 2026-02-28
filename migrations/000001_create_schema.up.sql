@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS employee (
     id BIGINT PRIMARY KEY REFERENCES person(id) ON DELETE CASCADE,
     hotel_id BIGINT NOT NULL REFERENCES hotel(id) ON DELETE CASCADE,
     department TEXT NOT NULL REFERENCES department(dept_name),
-    reports_to BIGINT REFERENCES employee(id),
+    manager_id BIGINT REFERENCES employee(id),
     salary NUMERIC(18, 2) NOT NULL,
     ssn TEXT UNIQUE NOT NULL,
     work_email CITEXT UNIQUE NOT NULL,

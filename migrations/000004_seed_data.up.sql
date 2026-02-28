@@ -23,7 +23,7 @@ INSERT INTO department (dept_name, budget) VALUES
 INSERT INTO person (name, gender, street, city, country) VALUES
     ('Angus Garcia', 'M', '78 Maple St', 'Belize City', 'Belize');
 
-INSERT INTO employee (id, hotel_id, department, reports_to, salary, ssn, work_email, work_phone, password_hash, employed)
+INSERT INTO employee (id, hotel_id, department, manager_id, salary, ssn, work_email, work_phone, password_hash, employed)
     SELECT id, 1, 'Hotel Operations', NULL, 60000, '123-45-6789', 'angus@grandoceanview.com', '501-111-1001', digest('hotel_password','sha256'), TRUE
     FROM person
     WHERE name='Angus Garcia';
@@ -38,7 +38,7 @@ INSERT INTO operations_manager (id, hotel_owner)
 INSERT INTO person (name, gender, street, city, country) VALUES
     ('Bea Sierra', 'F', '90 Cedar St', 'San Pedro', 'Belize');
 
-INSERT INTO employee (id, hotel_id, department, reports_to, salary, ssn, work_email, work_phone, password_hash, employed)
+INSERT INTO employee (id, hotel_id, department, manager_id, salary, ssn, work_email, work_phone, password_hash, employed)
     SELECT id, 1, 'Guest Services & Front Desk', 1, 40000, '987-65-4321', 'bea@grandoceanview.com', '501-222-1002', digest('hotel_password','sha256'), TRUE
     FROM person WHERE name='Bea Sierra';
 
@@ -52,7 +52,7 @@ INSERT INTO front_desk (id, shift)
 INSERT INTO person (name, gender, street, city, country) VALUES
     ('Clara Mendoza', 'F', '120 Sea Rd', 'San Pedro', 'Belize');
 
-INSERT INTO employee (id, hotel_id, department, reports_to, salary, ssn, work_email, work_phone, password_hash, employed)
+INSERT INTO employee (id, hotel_id, department, manager_id, salary, ssn, work_email, work_phone, password_hash, employed)
     SELECT id, 1, 'Housekeeping & Maintenance', 1, 35000, '555-66-7777', 'clara@grandoceanview.com', '501-111-1003', digest('hotel_password','sha256'), TRUE
     FROM person
     WHERE name='Clara Mendoza';

@@ -3,7 +3,7 @@
 
 DROP INDEX IF EXISTS idx_employee_hotel;
 DROP INDEX IF EXISTS idx_employee_department;
-DROP INDEX IF EXISTS idx_employee_reports_to;
+DROP INDEX IF EXISTS idx_employee_manager_id;
 
 DROP INDEX IF EXISTS idx_guest_email;
 
