@@ -20,7 +20,7 @@ type RoomType struct {
 	HasBalcony   bool    `json:"has_balcony"`
 }
 
-// ValidateRoomType checks for a required title and positive numbers.
+// ValidateRoomType performs validation checks for a room_type record.
 func ValidateRoomType(v *validator.Validator, rt *RoomType) {
 	v.Check(rt.Title != "", "title", "must be provided")
 	v.Check(rt.BaseRate > 0, "base_rate", "must be greater than 0")
@@ -28,12 +28,12 @@ func ValidateRoomType(v *validator.Validator, rt *RoomType) {
 	v.Check(rt.BedCount > 0, "bed_count", "must be greater than 0")
 }
 
-// RoomTypeModel holds a handler to the database.
+// RoomTypeModel holds the database handler.
 type RoomTypeModel struct {
 	DB *sql.DB
 }
 
-// Insert creates a record in table room_type.
+// Insert creates a room_type record.
 func (m RoomTypeModel) Insert(rt *RoomType) error {
 	query := `
 		INSERT INTO room_type (title, base_rate, max_occupancy, bed_count, has_balcony)
@@ -54,7 +54,7 @@ func (m RoomTypeModel) Insert(rt *RoomType) error {
 	return m.DB.QueryRowContext(ctx, query, args...).Scan(&rt.ID)
 }
 
-// Get retrieves room type information by its ID.
+// Get retrieves a single room_type record by id.
 func (m RoomTypeModel) Get(id int64) (*RoomType, error) {
 	query := `
 		SELECT id, title, base_rate, max_occupancy, bed_count, has_balcony
@@ -86,7 +86,7 @@ func (m RoomTypeModel) Get(id int64) (*RoomType, error) {
 	return &rt, nil
 }
 
-// GetAll reads all room types in the database (filterable).
+// GetAll retrieves multiple room_type records (filterable).
 func (m RoomTypeModel) GetAll(title string, filters Filters) ([]*RoomType, Metadata, error) {
 	query := fmt.Sprintf(`
 		SELECT count(*) OVER(),
@@ -144,7 +144,7 @@ func (m RoomTypeModel) GetAll(title string, filters Filters) ([]*RoomType, Metad
 	return roomTypes, metadata, nil
 }
 
-// Update modifies a room type.
+// Update modifies a room_type record by id.
 func (m RoomTypeModel) Update(rt *RoomType) error {
 	query := `
 		UPDATE room_type
@@ -184,7 +184,7 @@ func (m RoomTypeModel) Update(rt *RoomType) error {
 	return nil
 }
 
-// Delete removes a room type (cascades)
+// Delete removes a room_type record by id (cascades to room and registration).
 func (m RoomTypeModel) Delete(id int64) error {
 	query := `DELETE FROM room_type WHERE id = $1`
 

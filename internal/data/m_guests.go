@@ -10,7 +10,7 @@ import (
 	"github.com/andreshungbz/lab4-database-crud/internal/validator"
 )
 
-// Guest maps the guest entity, which is a subtype of the person entity.
+// Guest maps the guest entity (subtype of the person entity).
 type Guest struct {
 	// guest attributes
 	ID             int64  `json:"-"`
@@ -27,17 +27,17 @@ type Guest struct {
 	ModifiedAt time.Time `json:"-"`
 }
 
-// ValidateGuest checks for the passport number.
+// ValidateGuest performs validation checks for a guest record.
 func ValidateGuest(v *validator.Validator, guest *Guest) {
 	v.Check(guest.PassportNumber != "", "passport_number", "must be provided")
 }
 
-// GuestModel holds a handler to the database
+// GuestModel holds the database handler.
 type GuestModel struct {
 	DB *sql.DB
 }
 
-// Insert creates a record in tables person and guest.
+// Insert creates a guest record (person + guest tables).
 func (g GuestModel) Insert(guest *Guest) error {
 	query := `SELECT * FROM fn_create_guest($1, $2, $3, $4, $5, $6, $7, $8)`
 
@@ -63,7 +63,7 @@ func (g GuestModel) Insert(guest *Guest) error {
 	)
 }
 
-// Get reads a guest's passport and returns a Guest.
+// Get retrieves a single guest record by passport_number.
 func (g GuestModel) Get(passport string) (*Guest, error) {
 	query := `SELECT * FROM fn_get_guest($1)`
 	var guest Guest
@@ -98,7 +98,7 @@ func (g GuestModel) Get(passport string) (*Guest, error) {
 	return &guest, nil
 }
 
-// GetAll reads all guests in the database, filterable.
+// GetAll retrieves multiple guest records (filterable).
 func (g GuestModel) GetAll(name string, country string, filters Filters) ([]*Guest, Metadata, error) {
 	// PostgreSQL full-text search notes
 	// - to_tsvector in simple configuration breaks string to lower case lexemes.
@@ -123,7 +123,7 @@ func (g GuestModel) GetAll(name string, country string, filters Filters) ([]*Gue
 		JOIN person p ON p.id = g.id
 		WHERE (to_tsvector('simple', name) @@ plainto_tsquery('simple', $1) OR $1 = '')
 		AND (to_tsvector('simple', country) @@ plainto_tsquery('simple', $2) OR $2 = '')
-		ORDER BY %s %s, id ASC
+		ORDER BY %s %s, g.id ASC
 		LIMIT $3 OFFSET $4`, filters.sortColumn(), filters.sortDirection())
 
 	// limit is used for page_size, and offset is used for page
@@ -177,7 +177,7 @@ func (g GuestModel) GetAll(name string, country string, filters Filters) ([]*Gue
 	return guests, metadata, nil
 }
 
-// Update modifies the appropriate person and guest records for a guest.
+// Update modifies a guest record by passport_number (person + guest).
 func (g GuestModel) Update(guest *Guest) error {
 	query := `SELECT fn_update_guest($1, $2, $3, $4, $5, $6, $7, $8)`
 
@@ -214,8 +214,7 @@ func (g GuestModel) Update(guest *Guest) error {
 	return nil
 }
 
-// Delete removes a guest from the database and their associated reservations
-// and registrations.
+// Delete removes a guest record by passport_number (cascades to reservation and registration).
 func (g GuestModel) Delete(passport string) error {
 	query := `SELECT fn_delete_guest($1)`
 

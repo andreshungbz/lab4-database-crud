@@ -9,7 +9,8 @@ import (
 	"github.com/andreshungbz/lab4-database-crud/internal/validator"
 )
 
-// createRoomTypeHandler reads JSON input to create a room type.
+// createRoomTypeHandler calls RoomType.Insert.
+// Writes JSON of the created room_type record and its resource location.
 func (app *application) createRoomTypeHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Title        string  `json:"title"`
@@ -46,12 +47,13 @@ func (app *application) createRoomTypeHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	headers := make(http.Header)
-	headers.Set("Location", fmt.Sprintf("/v1/room-types/%d", rt.ID))
+	headers.Set("Location", fmt.Sprintf("/v1/room_types/%d", rt.ID))
 
 	app.writeJSON(w, http.StatusCreated, envelope{"room_type": rt}, headers)
 }
 
-// showRoomTypeHandler returns a JSON response of a room type by its ID.
+// showRoomTypeHandler calls RoomType.Get.
+// Writes JSON of the retrieved room_type record.
 func (app *application) showRoomTypeHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
@@ -73,7 +75,8 @@ func (app *application) showRoomTypeHandler(w http.ResponseWriter, r *http.Reque
 	app.writeJSON(w, http.StatusOK, envelope{"room_type": rt}, nil)
 }
 
-// listRoomTypesHandler returns all room types (filterable).
+// listRoomTypesHandler calls RoomType.GetAll.
+// Writes JSON of the list of filtered room_type records and a metadata object.
 func (app *application) listRoomTypesHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Title string
@@ -83,10 +86,10 @@ func (app *application) listRoomTypesHandler(w http.ResponseWriter, r *http.Requ
 	v := validator.New()
 	qs := r.URL.Query()
 
-	input.Title = app.readString(qs, "title", "")
+	input.Title = app.readURLString(qs, "title", "")
 	input.Filters.Page = app.readInt(qs, "page", 1, v)
 	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)
-	input.Filters.Sort = app.readString(qs, "sort", "id")
+	input.Filters.Sort = app.readURLString(qs, "sort", "id")
 	input.Filters.SortSafelist = []string{
 		"id", "title", "base_rate",
 		"-id", "-title", "-base_rate",
@@ -106,7 +109,8 @@ func (app *application) listRoomTypesHandler(w http.ResponseWriter, r *http.Requ
 	app.writeJSON(w, http.StatusOK, envelope{"room_types": roomTypes, "metadata": metadata}, nil)
 }
 
-// updateRoomTypeHandler reads JSON input and updates the corresponding room type by ID.
+// updateRoomTypeHandler calls RoomType.Update.
+// Writes JSON of the updated room_type record.
 func (app *application) updateRoomTypeHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
@@ -170,7 +174,8 @@ func (app *application) updateRoomTypeHandler(w http.ResponseWriter, r *http.Req
 	app.writeJSON(w, http.StatusOK, envelope{"room_type": rt}, nil)
 }
 
-// deleteRoomTypeHandler removes a room type by its ID (cascades).
+// deleteRoomTypeHandler calls RoomType.Delete.
+// Writes JSON of a successful deletion message.
 func (app *application) deleteRoomTypeHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {

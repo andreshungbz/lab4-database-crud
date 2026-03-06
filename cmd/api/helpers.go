@@ -118,15 +118,15 @@ func (app *application) readIDParam(r *http.Request) (int64, error) {
 	return id, nil
 }
 
-// readPassportParams validates and returns the given request URL's passport parameter.
-func (app *application) readPassportParam(r *http.Request) string {
+// readStringParams validates and returns a given request URL's parameter value.
+func (app *application) readStringParam(param string, r *http.Request) string {
 	params := httprouter.ParamsFromContext(r.Context())
 
-	return params.ByName("passport")
+	return params.ByName(param)
 }
 
-// readString gets the value of a URL key.
-func (app *application) readString(qs url.Values, key string, defaultValue string) string {
+// readURLString gets the value of a URL key.
+func (app *application) readURLString(qs url.Values, key string, defaultValue string) string {
 	s := qs.Get(key)
 
 	if s == "" {

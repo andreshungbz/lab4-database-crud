@@ -24,21 +24,37 @@ func (app *application) routes() http.Handler {
 
 	// DATABASE SCHEMA ROUTES
 
-	// Guest routes
-	router.HandlerFunc(http.MethodGet, "/v1/guests/:passport", app.showGuestHandler)
+	// guest routes
+	router.HandlerFunc(http.MethodGet, "/v1/guests/:passport_number", app.showGuestHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/guests", app.listGuestsHandler)
 	router.HandlerFunc(http.MethodPost, "/v1/guests", app.createGuestHandler)
-	router.HandlerFunc(http.MethodPut, "/v1/guests/:passport", app.updateGuestHandler)
-	router.HandlerFunc(http.MethodPatch, "/v1/guests/:passport", app.updateGuestHandler)
-	router.HandlerFunc(http.MethodDelete, "/v1/guests/:passport", app.deleteGuestHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/guests/:passport_number", app.updateGuestHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/guests/:passport_number", app.updateGuestHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/guests/:passport_number", app.deleteGuestHandler)
 
-	// Room Type routes
-	router.HandlerFunc(http.MethodGet, "/v1/room-types/:id", app.showRoomTypeHandler)
-	router.HandlerFunc(http.MethodGet, "/v1/room-types", app.listRoomTypesHandler)
-	router.HandlerFunc(http.MethodPost, "/v1/room-types", app.createRoomTypeHandler)
-	router.HandlerFunc(http.MethodPut, "/v1/room-types/:id", app.updateRoomTypeHandler)
-	router.HandlerFunc(http.MethodPatch, "/v1/room-types/:id", app.updateRoomTypeHandler)
-	router.HandlerFunc(http.MethodDelete, "/v1/room-types/:id", app.deleteRoomTypeHandler)
+	// hotel routes
+	router.HandlerFunc(http.MethodGet, "/v1/hotels/:id", app.showHotelHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/hotels", app.listHotelsHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/hotels", app.createHotelHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/hotels/:id", app.updateHotelHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/hotels/:id", app.updateHotelHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/hotels/:id", app.deleteHotelHandler)
+
+	// department routes
+	router.HandlerFunc(http.MethodGet, "/v1/departments/:dept_name", app.showDepartmentHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/departments", app.listDepartmentsHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/departments", app.createDepartmentHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/departments/:dept_name", app.updateDepartmentHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/departments/:dept_name", app.updateDepartmentHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/departments/:dept_name", app.deleteDepartmentHandler)
+
+	// room_type routes
+	router.HandlerFunc(http.MethodGet, "/v1/room_types/:id", app.showRoomTypeHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/room_types", app.listRoomTypesHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/room_types", app.createRoomTypeHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/room_types/:id", app.updateRoomTypeHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/room_types/:id", app.updateRoomTypeHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/room_types/:id", app.deleteRoomTypeHandler)
 
 	return app.recoverPanic(app.enableCORS(app.rateLimit(router)))
 }

@@ -9,8 +9,8 @@ import (
 	"github.com/andreshungbz/lab4-database-crud/internal/validator"
 )
 
-// createGuestHandler reads JSON input and creates a guest, returning it
-// in JSON output.
+// createGuestHandler calls Guest.Insert.
+// Writes JSON of the created guest record and its resource location.
 func (app *application) createGuestHandler(w http.ResponseWriter, r *http.Request) {
 	// Read JSON input into a Guest
 
@@ -67,11 +67,15 @@ func (app *application) createGuestHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-// showGuestHandler reads a guest's passport number and returns a JSON response
-// for that guest.
+// showGuestHandler calls Guest.Get.
+// Writes JSON of the retrieved guest record.
 func (app *application) showGuestHandler(w http.ResponseWriter, r *http.Request) {
 	// read passport parameter
-	passport := app.readPassportParam(r)
+	passport := app.readStringParam("passport_number", r)
+	if passport == "" {
+		app.notFoundResponse(w, r)
+		return
+	}
 
 	// retrieve guest from database
 	guest, err := app.models.Guest.Get(passport)
@@ -92,8 +96,8 @@ func (app *application) showGuestHandler(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-// listGuestsHandler returns JSON of all guests. Filters, pagination, and sorting
-// applicable.
+// listGuestsHandler calls Guest.GetAll.
+// Writes JSON of the list of filtered guest records and a metadata object.
 func (app *application) listGuestsHandler(w http.ResponseWriter, r *http.Request) {
 	// create input for filters (pagination + sort)
 	var input struct {
@@ -107,12 +111,12 @@ func (app *application) listGuestsHandler(w http.ResponseWriter, r *http.Request
 	qs := r.URL.Query()
 
 	// read parameters for filtering (search, pagination and sorting)
-	input.Name = app.readString(qs, "name", "")                        // guest name
-	input.Country = app.readString(qs, "country", "")                  // guest country
-	input.Filters.Page = app.readInt(qs, "page", 1, v)                 // default: 1st page
-	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)       // default: 20 items per page
-	input.Filters.Sort = app.readString(qs, "sort", "passport_number") // default: sort by passport number ascending
-	input.Filters.SortSafelist = []string{                             // allowed sorting options
+	input.Name = app.readURLString(qs, "name", "")                        // guest name
+	input.Country = app.readURLString(qs, "country", "")                  // guest country
+	input.Filters.Page = app.readInt(qs, "page", 1, v)                    // default: 1st page
+	input.Filters.PageSize = app.readInt(qs, "page_size", 20, v)          // default: 20 items per page
+	input.Filters.Sort = app.readURLString(qs, "sort", "passport_number") // default: sort by passport number ascending
+	input.Filters.SortSafelist = []string{                                // allowed sorting options
 		"passport_number", "name", "created_at",
 		"-passport_number", "-name", "-created_at",
 	}
@@ -137,12 +141,15 @@ func (app *application) listGuestsHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-// updateGuestHandler uses the guest's passport number to retrieve the guest,
-// updates its values with JSON input, and returns the updated guest as JSON
-// output.
+// updateGuestHandler calls Guest.Update.
+// Writes JSON of the updated guest record.
 func (app *application) updateGuestHandler(w http.ResponseWriter, r *http.Request) {
 	// read passport parameter
-	passport := app.readPassportParam(r)
+	passport := app.readStringParam("passport_number", r)
+	if passport == "" {
+		app.notFoundResponse(w, r)
+		return
+	}
 
 	// retrieve guest from database
 	guest, err := app.models.Guest.Get(passport)
@@ -222,12 +229,15 @@ func (app *application) updateGuestHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-// deleteGuestHandler uses the guest's passport number in order to delete their
-// record in the database. Corresponding records in person, reservation, and
-// registration are also deleted.
+// deleteGuestHandler calls Guest.Delete.
+// Writes JSON of a successful deletion message.
 func (app *application) deleteGuestHandler(w http.ResponseWriter, r *http.Request) {
 	// read passport parameter
-	passport := app.readPassportParam(r)
+	passport := app.readStringParam("passport_number", r)
+	if passport == "" {
+		app.notFoundResponse(w, r)
+		return
+	}
 
 	// delete guest and associated records from the database
 	err := app.models.Guest.Delete(passport)
