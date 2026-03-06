@@ -1,0 +1,17 @@
+{
+  "name": "Elena Rojas",
+  "gender": "F",
+  "street": "88 Coral Lane",
+  "city": "San Pedro",
+  "country": "Belize",
+  "hotel_id": 1,
+  "department": "Guest Services & Front Desk",
+  "manager_id": 2,
+  "salary": 42000,
+  "ssn": "876-54-3210",
+  "work_email": "elena@grandoceanview.com",
+  "work_phone": "501-444-1020",
+  "password": "hotel_password",
+  "role": "front_desk",
+  "shift": "day"
+}

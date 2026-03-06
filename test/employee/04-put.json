@@ -1,0 +1,15 @@
+{
+  "name": "Fernando Castillo",
+  "gender": "M",
+  "street": "103 New Palm St",
+  "city": "San Pedro",
+  "country": "Belize",
+  "hotel_id": 1,
+  "department": "Housekeeping & Maintenance",
+  "manager_id": 2,
+  "salary": 38000,
+  "work_email": "fernando.castillo@grandoceanview.com",
+  "work_phone": "501-333-1010",
+  "role": "housekeeper",
+  "shift": "day"
+}

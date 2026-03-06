@@ -1,0 +1,11 @@
+-- migrations/employee_functions.down.sql
+-- Drops the employee functions.
+
+DROP FUNCTION IF EXISTS fn_delete_employee(BIGINT);
+DROP FUNCTION IF EXISTS fn_update_employee(
+    BIGINT, BIGINT, TEXT, BIGINT, NUMERIC, CITEXT, CITEXT, TEXT, BOOLEAN, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
+);
+DROP FUNCTION IF EXISTS fn_get_employee(BIGINT);
+DROP FUNCTION IF EXISTS fn_create_employee(
+    BIGINT, TEXT, BIGINT, NUMERIC, TEXT, CITEXT, CITEXT, BYTEA, TEXT, BOOLEAN, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
+);

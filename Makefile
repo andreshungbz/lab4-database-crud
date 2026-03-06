@@ -242,6 +242,60 @@ test/api/departments/delete:
 	curl -i -X DELETE "http://localhost:4000/v1/departments/Restaurant%20Operations"
 
 # ==================================================================================== #
+# Employee Model
+# ==================================================================================== #
+
+# GET
+.PHONY: test/api/employees/get
+test/api/employees/get:
+	curl -i http://localhost:4000/v1/employees/1
+
+# GET ALL
+.PHONY: test/api/employees/get-all
+test/api/employees/get-all:
+	curl -i http://localhost:4000/v1/employees
+
+# GET ALL (filtered by role)
+.PHONY: test/api/employees/get-all-role
+test/api/employees/get-all-role:
+	curl -i "http://localhost:4000/v1/employees?role=operations_manager"
+
+# GET ALL (filters, pagination and sorting)
+.PHONY: test/api/employees/get-all-filters
+test/api/employees/get-all-filters:
+	curl -i "http://localhost:4000/v1/employees?page=1&page_size=2&sort=-id"
+
+# POST Operations Manager
+.PHONY: test/api/employees/post-om
+test/api/employees/post-om:
+	curl -i -X POST http://localhost:4000/v1/employees -d @test/employee/01-post-om.json
+
+# POST Front Desk
+.PHONY: test/api/employees/post-fd
+test/api/employees/post-fd:
+	curl -i -X POST http://localhost:4000/v1/employees -d @test/employee/02-post-fd.json
+
+# POST Housekeeper
+.PHONY: test/api/employees/post-hk
+test/api/employees/post-hk:
+	curl -i -X POST http://localhost:4000/v1/employees -d @test/employee/03-post-hk.json
+
+# PUT
+.PHONY: test/api/employees/put
+test/api/employees/put:
+	curl -i -X PUT http://localhost:4000/v1/employees/14 -d @test/employee/04-put.json
+
+# PATCH
+.PHONY: test/api/employees/patch
+test/api/employees/patch:
+	curl -i -X PATCH http://localhost:4000/v1/employees/14 -d @test/employee/05-patch.json
+
+# DELETE
+.PHONY: test/api/employees/delete
+test/api/employees/delete:
+	curl -i -X DELETE http://localhost:4000/v1/employees/14
+
+# ==================================================================================== #
 # Room Model
 # ==================================================================================== #
 

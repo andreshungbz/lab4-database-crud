@@ -48,10 +48,18 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/departments/:dept_name", app.updateDepartmentHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/departments/:dept_name", app.deleteDepartmentHandler)
 
+	// employee routes
+	router.HandlerFunc(http.MethodGet, "/v1/employees/:id", app.showEmployeeHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/employees", app.listEmployeesHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/employees", app.createEmployeeHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/employees/:id", app.updateEmployeeHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/employees/:id", app.updateEmployeeHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/employees/:id", app.deleteEmployeeHandler)
+
 	// room routes
 	router.HandlerFunc(http.MethodGet, "/v1/hotels/:id/rooms", app.listRoomsHandler)
-	router.HandlerFunc(http.MethodPost, "/v1/hotels/:id/rooms", app.createRoomHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/hotels/:id/rooms/:number", app.showRoomHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/hotels/:id/rooms", app.createRoomHandler)
 	router.HandlerFunc(http.MethodPut, "/v1/hotels/:id/rooms/:number", app.updateRoomHandler)
 	router.HandlerFunc(http.MethodPatch, "/v1/hotels/:id/rooms/:number", app.updateRoomHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/hotels/:id/rooms/:number", app.deleteRoomHandler)
