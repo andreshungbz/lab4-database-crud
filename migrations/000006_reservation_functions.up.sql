@@ -1,4 +1,4 @@
--- migrations/create_reservation_functions.up.sql
+-- migrations/reservation_functions.up.sql
 -- Creates functions for reservations and registrations.
 
 -- ====================================================================================

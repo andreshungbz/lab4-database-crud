@@ -1,4 +1,4 @@
--- migrations/create_guest_functions.up.sql
+-- migrations/guest_functions.up.sql
 -- Creates functions for guests.
 
 -- ====================================================================================

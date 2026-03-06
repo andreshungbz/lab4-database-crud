@@ -1,4 +1,4 @@
--- migrations/create_indexes.up.sql
+-- migrations/indexes.up.sql
 -- Creates indexes on the tables.
 -- PostgreSQL creates indexes automatically for only primary keys and UNIQUE constraints, so
 -- indexes are created on the foreign keys of the tables. Additional indexes are created on
