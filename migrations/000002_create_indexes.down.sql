@@ -1,4 +1,4 @@
--- migrations/000002_create_indexes.down.sql
+-- migrations/create_indexes.down.sql
 -- Drops created indexes.
 
 DROP INDEX IF EXISTS idx_employee_hotel;

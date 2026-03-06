@@ -1,4 +1,4 @@
--- migrations/000001_create_schema.down.sql
+-- migrations/create_schema.down.sql
 -- Drops all tables and types in the reverse order they were created.
 
 -- Housekeeping Activities

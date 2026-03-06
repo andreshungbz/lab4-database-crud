@@ -1,4 +1,4 @@
--- migrations/000001_create_schema.up.sql
+-- migrations/create_schema.up.sql
 -- Creates the entire database schema.
 
 -- ====================================================================================

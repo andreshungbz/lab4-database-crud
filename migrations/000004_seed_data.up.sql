@@ -1,4 +1,4 @@
--- migrations/000004_seed_data.up.sql
+-- migrations/seed_data.up.sql
 -- Inserts example data to work with.
 
 -- ====================================================================================

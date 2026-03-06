@@ -1,4 +1,4 @@
--- migrations/000003_create_modified_at_triggers.down.sql
+-- migrations/create_modified_at_triggers.down.sql
 -- Drops triggers then trigger functions for setting modified_at.
 
 -- Triggers

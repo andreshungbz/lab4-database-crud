@@ -1,4 +1,4 @@
--- migrations/000003_create_modified_at_triggers.up.sql
+-- migrations/create_modified_at_triggers.up.sql
 -- Creates triggers for all tables with modified_at fields.
 
 -- ====================================================================================
