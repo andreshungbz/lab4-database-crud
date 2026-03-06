@@ -48,6 +48,14 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/departments/:dept_name", app.updateDepartmentHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/departments/:dept_name", app.deleteDepartmentHandler)
 
+	// room routes
+	router.HandlerFunc(http.MethodGet, "/v1/hotels/:id/rooms", app.listRoomsHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/hotels/:id/rooms", app.createRoomHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/hotels/:id/rooms/:number", app.showRoomHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/hotels/:id/rooms/:number", app.updateRoomHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/hotels/:id/rooms/:number", app.updateRoomHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/hotels/:id/rooms/:number", app.deleteRoomHandler)
+
 	// room_type routes
 	router.HandlerFunc(http.MethodGet, "/v1/room_types/:id", app.showRoomTypeHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/room_types", app.listRoomTypesHandler)

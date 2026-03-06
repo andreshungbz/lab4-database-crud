@@ -55,7 +55,7 @@ func (app *application) createRoomTypeHandler(w http.ResponseWriter, r *http.Req
 // showRoomTypeHandler calls RoomType.Get.
 // Writes JSON of the retrieved room_type record.
 func (app *application) showRoomTypeHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := app.readIDParam(r)
+	id, err := app.readInt64Param("id", r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
@@ -112,7 +112,7 @@ func (app *application) listRoomTypesHandler(w http.ResponseWriter, r *http.Requ
 // updateRoomTypeHandler calls RoomType.Update.
 // Writes JSON of the updated room_type record.
 func (app *application) updateRoomTypeHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := app.readIDParam(r)
+	id, err := app.readInt64Param("id", r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
@@ -177,7 +177,7 @@ func (app *application) updateRoomTypeHandler(w http.ResponseWriter, r *http.Req
 // deleteRoomTypeHandler calls RoomType.Delete.
 // Writes JSON of a successful deletion message.
 func (app *application) deleteRoomTypeHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := app.readIDParam(r)
+	id, err := app.readInt64Param("id", r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return

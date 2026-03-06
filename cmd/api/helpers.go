@@ -106,19 +106,31 @@ func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst any
 	return nil
 }
 
-// readIDParams validates and returns the given request URL's id parameter.
-func (app *application) readIDParam(r *http.Request) (int64, error) {
+// readInt64Param validates and returns the given request URL's parameter value as an int64 type.
+func (app *application) readInt64Param(param string, r *http.Request) (int64, error) {
 	params := httprouter.ParamsFromContext(r.Context())
 
-	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
-	if err != nil || id < 1 { // ensure the id is positive
-		return 0, errors.New("Invalid id parameter")
+	id, err := strconv.ParseInt(params.ByName(param), 10, 64)
+	if err != nil || id < 1 { // ensure number is positive
+		return 0, errors.New("Invalid parameter")
 	}
 
 	return id, nil
 }
 
-// readStringParams validates and returns a given request URL's parameter value.
+// readIntParam validates and returns the given request URL's parameter value as an int type.
+func (app *application) readIntParam(param string, r *http.Request) (int, error) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	n, err := strconv.ParseInt(params.ByName(param), 10, 64)
+	if err != nil || n < 1 { // ensure number is positive
+		return 0, errors.New("Invalid parameter")
+	}
+
+	return int(n), nil
+}
+
+// readStringParams validates and returns a given request URL's parameter value as a string type.
 func (app *application) readStringParam(param string, r *http.Request) string {
 	params := httprouter.ParamsFromContext(r.Context())
 

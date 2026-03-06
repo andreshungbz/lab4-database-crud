@@ -57,7 +57,7 @@ func (app *application) createHotelHandler(w http.ResponseWriter, r *http.Reques
 // showHotelHandler calls Hotel.Get.
 // Writes JSON of the retrieved hotel record.
 func (app *application) showHotelHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := app.readIDParam(r)
+	id, err := app.readInt64Param("id", r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
@@ -114,7 +114,7 @@ func (app *application) listHotelsHandler(w http.ResponseWriter, r *http.Request
 // updateHotelHandler calls Hotel.Update.
 // Writes JSON of the updated hotel record.
 func (app *application) updateHotelHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := app.readIDParam(r)
+	id, err := app.readInt64Param("id", r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
@@ -184,7 +184,7 @@ func (app *application) updateHotelHandler(w http.ResponseWriter, r *http.Reques
 // deleteHotelHandler calls Hotel.Delete.
 // Writes JSON of a successful deletion message.
 func (app *application) deleteHotelHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := app.readIDParam(r)
+	id, err := app.readInt64Param("id", r)
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return

@@ -15,6 +15,7 @@ type Models struct {
 	Guest      GuestModel
 	Hotel      HotelModel
 	Department DepartmentModel
+	Room       RoomModel
 	RoomType   RoomTypeModel
 }
 
@@ -24,6 +25,7 @@ func NewModels(db *sql.DB) Models {
 		Guest:      GuestModel{DB: db},
 		Hotel:      HotelModel{DB: db},
 		Department: DepartmentModel{DB: db},
+		Room:       RoomModel{DB: db},
 		RoomType:   RoomTypeModel{DB: db},
 	}
 }
