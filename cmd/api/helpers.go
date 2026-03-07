@@ -167,15 +167,15 @@ func (app *application) readURLString(qs url.Values, key string, defaultValue st
 }
 
 // readCSV parses a comma-separated list of key values.
-func (app *application) readCSV(qs url.Values, key string, defaultValue []string) []string {
-	csv := qs.Get(key)
+// func (app *application) readCSV(qs url.Values, key string, defaultValue []string) []string {
+// 	csv := qs.Get(key)
 
-	if csv == "" {
-		return defaultValue
-	}
+// 	if csv == "" {
+// 		return defaultValue
+// 	}
 
-	return strings.Split(csv, ",")
-}
+// 	return strings.Split(csv, ",")
+// }
 
 // readInt returns the integer value of a specified URL key. It validates the conversion
 // from string to integer.
