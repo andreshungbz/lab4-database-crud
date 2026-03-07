@@ -1,0 +1,9 @@
+{
+  "guest_id": 4,
+  "checkin_date": "2026-03-10",
+  "checkout_date": "2026-03-12",
+  "payment_method": "credit_card",
+  "source": "direct",
+  "room_type_id": 1,
+  "hotel_id": 1
+}

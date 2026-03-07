@@ -1,0 +1,9 @@
+{
+  "checkin_date": "2026-03-11",
+  "checkout_date": "2026-03-13",
+  "payment_amount": 350.0,
+  "payment_method": "credit_card",
+  "source": "Expedia",
+  "completed": true,
+  "canceled": true
+}

@@ -494,3 +494,42 @@ test/api/registrations/patch:
 .PHONY: test/api/registrations/delete
 test/api/registrations/delete:
 	curl -i -X DELETE http://localhost:4000/v1/registrations/2/1/102
+
+# ==================================================================================== #
+# Registration Model
+# ==================================================================================== #
+
+# GET
+.PHONY: test/api/reservations/get
+test/api/reservations/get:
+	curl -i http://localhost:4000/v1/reservations/2
+
+# GET ALL (reservations)
+.PHONY: test/api/reservations/get-all
+test/api/reservations/get-all:
+	curl -i http://localhost:4000/v1/reservations
+
+# GET ALL (filters, pagination and sorting)
+.PHONY: test/api/reservations/get-all-filters
+test/api/reservations/get-all-filters:
+	curl -i "http://localhost:4000/v1/reservations?page=1&page_size=2&sort=-id"
+
+# POST
+.PHONY: test/api/reservations/post
+test/api/reservations/post:
+	curl -i -X POST http://localhost:4000/v1/reservations -d @test/reservation/01-post.json
+
+# PUT
+.PHONY: test/api/reservations/put
+test/api/reservations/put:
+	curl -i -X PUT http://localhost:4000/v1/reservations/7 -d @test/reservation/02-put.json
+
+# PATCH
+.PHONY: test/api/reservations/patch
+test/api/reservations/patch:
+	curl -i -X PATCH http://localhost:4000/v1/reservations/7 -d @test/reservation/03-patch.json
+
+# DELETE
+.PHONY: test/api/reservations/delete
+test/api/reservations/delete:
+	curl -i -X DELETE http://localhost:4000/v1/reservations/7

@@ -96,5 +96,13 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/registrations/:reservationID/:hotelID/:roomNumber", app.updateRegistrationHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/registrations/:reservationID/:hotelID/:roomNumber", app.deleteRegistrationHandler)
 
+	// reservation routes
+	router.HandlerFunc(http.MethodGet, "/v1/reservations/:reservationID", app.showReservationHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/reservations", app.listReservationsHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/reservations", app.createReservationHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/reservations/:reservationID", app.updateReservationHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/reservations/:reservationID", app.updateReservationHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/reservations/:reservationID", app.deleteReservationHandler)
+
 	return app.recoverPanic(app.enableCORS(app.rateLimit(router)))
 }
