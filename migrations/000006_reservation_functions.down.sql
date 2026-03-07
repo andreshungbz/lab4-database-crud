@@ -35,10 +35,6 @@ DROP FUNCTION IF EXISTS fn_find_available_room(
     DATE
 );
 
-DROP FUNCTION IF EXISTS fn_get_registrations(
-    BIGINT
-);
-
 DROP FUNCTION IF EXISTS fn_create_registration(
     BIGINT,
     INT,

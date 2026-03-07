@@ -20,6 +20,7 @@ type Models struct {
 	RoomType          RoomTypeModel
 	HousekeepingTask  HousekeepingTaskModel
 	MaintenanceReport MaintenanceReportModel
+	Registration      RegistrationModel
 }
 
 // NewModels returns all Models configured with the database handler.
@@ -33,5 +34,6 @@ func NewModels(db *sql.DB) Models {
 		RoomType:          RoomTypeModel{DB: db},
 		HousekeepingTask:  HousekeepingTaskModel{DB: db},
 		MaintenanceReport: MaintenanceReportModel{DB: db},
+		Registration:      RegistrationModel{DB: db},
 	}
 }
