@@ -377,3 +377,47 @@ test/api/room_types/patch:
 .PHONY: test/api/room_types/delete
 test/api/room_types/delete:
 	curl -i -X DELETE http://localhost:4000/v1/room_types/4
+
+# ==================================================================================== #
+# HousekeepingTask Model
+# ==================================================================================== #
+
+# GET
+.PHONY: test/api/housekeeping_tasks/get
+test/api/housekeeping_tasks/get:
+	curl -i http://localhost:4000/v1/housekeeping_tasks/1
+
+# GET ALL (tasks for a room)
+.PHONY: test/api/housekeeping_tasks/get-all
+test/api/housekeeping_tasks/get-all:
+	curl -i http://localhost:4000/v1/hotels/1/rooms/101/housekeeping_tasks
+
+# GET ALL (filtered by housekeeper)
+.PHONY: test/api/housekeeping_tasks/get-all-housekeeper
+test/api/housekeeping_tasks/get-all-housekeeper:
+	curl -i "http://localhost:4000/v1/hotels/1/rooms/101/housekeeping_tasks?housekeeper_id=3"
+
+# GET ALL (filters, pagination and sorting)
+.PHONY: test/api/housekeeping_tasks/get-all-filters
+test/api/housekeeping_tasks/get-all-filters:
+	curl -i "http://localhost:4000/v1/hotels/1/rooms/101/housekeeping_tasks?page=1&page_size=1&sort=-created_at"
+
+# POST
+.PHONY: test/api/housekeeping_tasks/post
+test/api/housekeeping_tasks/post:
+	curl -i -X POST http://localhost:4000/v1/hotels/1/rooms/301/housekeeping_tasks -d @test/housekeeping_task/01-post.json
+
+# PUT
+.PHONY: test/api/housekeeping_tasks/put
+test/api/housekeeping_tasks/put:
+	curl -i -X PUT http://localhost:4000/v1/housekeeping_tasks/6 -d @test/housekeeping_task/02-put.json
+
+# PATCH
+.PHONY: test/api/housekeeping_tasks/patch
+test/api/housekeeping_tasks/patch:
+	curl -i -X PATCH http://localhost:4000/v1/housekeeping_tasks/6 -d @test/housekeeping_task/03-patch.json
+
+# DELETE
+.PHONY: test/api/housekeeping_tasks/delete
+test/api/housekeeping_tasks/delete:
+	curl -i -X DELETE http://localhost:4000/v1/housekeeping_tasks/6

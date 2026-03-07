@@ -130,6 +130,24 @@ func (app *application) readIntParam(param string, r *http.Request) (int, error)
 	return int(n), nil
 }
 
+// readOptionalInt64 reads an optional query parameter and returns a pointer to int64.
+// If the parameter is not provided, it returns nil.
+// If provided but invalid, it returns an error.
+func (app *application) readOptionalInt64(qs url.Values, key string) (*int64, error) {
+	s := qs.Get(key)
+
+	if s == "" {
+		return nil, nil
+	}
+
+	id, err := strconv.ParseInt(s, 10, 64)
+	if err != nil || id < 1 {
+		return nil, errors.New("invalid parameter")
+	}
+
+	return &id, nil
+}
+
 // readStringParams validates and returns a given request URL's parameter value as a string type.
 func (app *application) readStringParam(param string, r *http.Request) string {
 	params := httprouter.ParamsFromContext(r.Context())

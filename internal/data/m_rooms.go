@@ -108,7 +108,7 @@ func (m RoomModel) Get(hotelID int64, number int) (*Room, error) {
 	return &r, nil
 }
 
-// GetAll retrieves all rooms belonging to a specific hotel.
+// GetAll retrieves multiple room records (filterable).
 func (m RoomModel) GetAll(hotelID int64, filters Filters) ([]*Room, Metadata, error) {
 	query := fmt.Sprintf(`
 		SELECT

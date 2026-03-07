@@ -12,22 +12,24 @@ var (
 
 // Models groups all database models used in the application.
 type Models struct {
-	Guest      GuestModel
-	Hotel      HotelModel
-	Department DepartmentModel
-	Employee   EmployeeModel
-	Room       RoomModel
-	RoomType   RoomTypeModel
+	Guest            GuestModel
+	Hotel            HotelModel
+	Department       DepartmentModel
+	Employee         EmployeeModel
+	Room             RoomModel
+	RoomType         RoomTypeModel
+	HousekeepingTask HousekeepingTaskModel
 }
 
 // NewModels returns all Models configured with the database handler.
 func NewModels(db *sql.DB) Models {
 	return Models{
-		Guest:      GuestModel{DB: db},
-		Hotel:      HotelModel{DB: db},
-		Department: DepartmentModel{DB: db},
-		Employee:   EmployeeModel{DB: db},
-		Room:       RoomModel{DB: db},
-		RoomType:   RoomTypeModel{DB: db},
+		Guest:            GuestModel{DB: db},
+		Hotel:            HotelModel{DB: db},
+		Department:       DepartmentModel{DB: db},
+		Employee:         EmployeeModel{DB: db},
+		Room:             RoomModel{DB: db},
+		RoomType:         RoomTypeModel{DB: db},
+		HousekeepingTask: HousekeepingTaskModel{DB: db},
 	}
 }
