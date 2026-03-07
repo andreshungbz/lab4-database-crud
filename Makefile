@@ -421,3 +421,37 @@ test/api/housekeeping_tasks/patch:
 .PHONY: test/api/housekeeping_tasks/delete
 test/api/housekeeping_tasks/delete:
 	curl -i -X DELETE http://localhost:4000/v1/housekeeping_tasks/6
+
+# ==================================================================================== #
+# MaintenanceReport Model
+# ==================================================================================== #
+
+# GET
+.PHONY: test/api/maintenance_reports/get
+test/api/maintenance_reports/get:
+	curl -i http://localhost:4000/v1/maintenance_reports/1
+
+# GET ALL (for a room)
+.PHONY: test/api/maintenance_reports/get-all
+test/api/maintenance_reports/get-all:
+	curl -i http://localhost:4000/v1/hotels/1/rooms/101/maintenance_reports
+
+# POST
+.PHONY: test/api/maintenance_reports/post
+test/api/maintenance_reports/post:
+	curl -i -X POST http://localhost:4000/v1/hotels/1/rooms/101/maintenance_reports -d @test/maintenance_report/01-post.json
+
+# PUT
+.PHONY: test/api/maintenance_reports/put
+test/api/maintenance_reports/put:
+	curl -i -X PUT http://localhost:4000/v1/maintenance_reports/5 -d @test/maintenance_report/02-put.json
+
+# PATCH
+.PHONY: test/api/maintenance_reports/patch
+test/api/maintenance_reports/patch:
+	curl -i -X PATCH http://localhost:4000/v1/maintenance_reports/5 -d @test/maintenance_report/03-patch.json
+
+# DELETE
+.PHONY: test/api/maintenance_reports/delete
+test/api/maintenance_reports/delete:
+	curl -i -X DELETE http://localhost:4000/v1/maintenance_reports/5

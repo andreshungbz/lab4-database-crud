@@ -80,5 +80,13 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/housekeeping_tasks/:taskID", app.updateHousekeepingTaskHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/housekeeping_tasks/:taskID", app.deleteHousekeepingTaskHandler)
 
+	// maintenance_report routes
+	router.HandlerFunc(http.MethodGet, "/v1/maintenance_reports/:reportID", app.showMaintenanceReportHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/hotels/:id/rooms/:number/maintenance_reports", app.listMaintenanceReportsHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/hotels/:id/rooms/:number/maintenance_reports", app.createMaintenanceReportHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/maintenance_reports/:reportID", app.updateMaintenanceReportHandler)
+	router.HandlerFunc(http.MethodPatch, "/v1/maintenance_reports/:reportID", app.updateMaintenanceReportHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/maintenance_reports/:reportID", app.deleteMaintenanceReportHandler)
+
 	return app.recoverPanic(app.enableCORS(app.rateLimit(router)))
 }
