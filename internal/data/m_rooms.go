@@ -19,7 +19,9 @@ type Room struct {
 	StatusCode string    `json:"status_code"`
 	ModifiedAt time.Time `json:"modified_at"`
 
-	RoomType RoomType `json:"room_type,omitzero"`
+	RoomType           RoomType             `json:"room_type,omitzero"`
+	HousekeepingTasks  []*HousekeepingTask  `json:"housekeeping_tasks,omitempty"`
+	MaintenanceReports []*MaintenanceReport `json:"maintenance_reports,omitempty"`
 }
 
 // ValidateRoom performs validation checks for a room record.
@@ -105,6 +107,27 @@ func (m RoomModel) Get(hotelID int64, number int) (*Room, error) {
 		}
 	}
 
+	hktasks, _, err := (&HousekeepingTaskModel{DB: m.DB}).GetAll(
+		r.HotelID,
+		r.Number,
+		nil,
+		Filters{Page: 1, PageSize: 100, Sort: "-created_at", SortSafelist: []string{"-created_at"}},
+	)
+	if err != nil {
+		return nil, fmt.Errorf("fetch housekeeping tasks: %w", err)
+	}
+	r.HousekeepingTasks = hktasks
+
+	mreports, _, err := (&MaintenanceReportModel{DB: m.DB}).GetAll(
+		r.HotelID,
+		r.Number,
+		Filters{Page: 1, PageSize: 100, Sort: "-created_at", SortSafelist: []string{"-created_at"}},
+	)
+	if err != nil {
+		return nil, fmt.Errorf("fetch maintenance reports: %w", err)
+	}
+	r.MaintenanceReports = mreports
+
 	return &r, nil
 }
 
@@ -167,6 +190,27 @@ func (m RoomModel) GetAll(hotelID int64, filters Filters) ([]*Room, Metadata, er
 		if err != nil {
 			return nil, Metadata{}, err
 		}
+
+		hktasks, _, err := (&HousekeepingTaskModel{DB: m.DB}).GetAll(
+			r.HotelID,
+			r.Number,
+			nil,
+			Filters{Page: 1, PageSize: 100, Sort: "-created_at", SortSafelist: []string{"-created_at"}},
+		)
+		if err != nil {
+			return nil, Metadata{}, fmt.Errorf("fetch housekeeping tasks: %w", err)
+		}
+		r.HousekeepingTasks = hktasks
+
+		mreports, _, err := (&MaintenanceReportModel{DB: m.DB}).GetAll(
+			r.HotelID,
+			r.Number,
+			Filters{Page: 1, PageSize: 100, Sort: "-created_at", SortSafelist: []string{"-created_at"}},
+		)
+		if err != nil {
+			return nil, Metadata{}, fmt.Errorf("fetch maintenance reports: %w", err)
+		}
+		r.MaintenanceReports = mreports
 
 		rooms = append(rooms, &r)
 	}
